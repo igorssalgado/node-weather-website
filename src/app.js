@@ -1,4 +1,5 @@
 const path = require('path');
+const http = require('http');
 const express = require('express');
 const hbs = require('hbs');
 const geocode = require('./utils/geocode');
@@ -6,6 +7,11 @@ const forecast = require('./utils/forecast');
 
 const app = express();
 const port = process.env.PORT || 3000 // to set port for heroku
+
+//Socket.io configuration
+const server = http.createServer(app);
+const sockedio = require('socket.io'); // for location button
+const io = sockedio(server); // for location button
 
 // Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public');
@@ -101,6 +107,10 @@ app.get('*', (req, res) => {
     });
 });
 
-app.listen(port, () => {
+io.on('connection', (socket) => { // for location button; connection is going to fire whenever the socked.io server gets a new connection
+    console.log('New WebSocket connection')
+})
+
+server.listen(port, () => {
     console.log('Server is up on port %s.', port);
 });
