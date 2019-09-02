@@ -2,6 +2,7 @@ const weatherForm = document.querySelector('form');
 const search = document.querySelector('input');
 const messageOne = document.querySelector('#message-1');
 const messageTwo = document.querySelector('#message-2');
+const sendLocationButton = document.querySelector('#current-location-weather')
 
 // messageOne.textContent = 'From JavaScript'
 
@@ -11,7 +12,6 @@ weatherForm.addEventListener('submit', (e) => {
     const location = search.value;
     messageOne.textContent = 'Loading...';
     messageTwo.textContent = '';
-
 
     fetch('/weather?address=' + location).then((response) => {
         response.json().then((data) => {
@@ -25,3 +25,22 @@ weatherForm.addEventListener('submit', (e) => {
         });
     });
 });
+
+sendLocationButton.addEventListener('click', () => {
+    // sendLocationButton.setAttribute('disabled', 'disabled');
+
+    console.log('clickedd')
+    if (!navigator.geolocation) {
+        return alert('Geolocation is not supported by your browser.')
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        }
+        console.log(position);
+    });
+});
+
+

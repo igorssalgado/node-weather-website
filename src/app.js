@@ -67,9 +67,7 @@ app.get('/weather', (req, res) => {
                 address: address
             });
         });
-    });
-
- 
+    }); 
 });
 
 app.get('/products', (req, res) => {
