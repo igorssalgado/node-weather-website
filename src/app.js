@@ -51,7 +51,7 @@ app.get('/weather', (req, res) => {
 
     const address = req.query.address;
     const actualLocation = req.query.name
-    console.log(actualLocation);
+    
     if (actualLocation) {
         forecast(actualLocation.latitude, actualLocation.longitude, (error, forecastData) => {     // order: lat, long
             if (error) {

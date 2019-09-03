@@ -28,8 +28,13 @@ weatherForm.addEventListener('submit', (e) => {
     });
 });
 
-sendLocationButton.addEventListener('click', () => {
+sendLocationButton.addEventListener('click', (e) => {
     // sendLocationButton.setAttribute('disabled', 'disabled');
+    e.preventDefault();
+
+    const location = search.value;
+    messageOne.textContent = 'Loading...';
+    messageTwo.textContent = '';
 
     console.log('clickedd')
     if (!navigator.geolocation) {
