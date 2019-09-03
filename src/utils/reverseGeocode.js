@@ -1,9 +1,7 @@
-const request = require('request');
+const geo = require('mapbox-geocoding')
 
-const geocode = (latitude, logitude, callback) => {
-    // const latitude = '-22.898786599999998'
-    // const logitude = '-47.2014923'
-    geocode.reverseGeocode('mapbox.places', latitude, logitude, function (err, geoData) {
-        console.log(geoData);
+    geo.reverseGeocode('mapbox.places', '-22.898786599999998', '-47.2014923', function (err, geoData) {
+        console.log(' ' + geoData);
     });
-};
+
+// mapbox api token: pk.eyJ1Ijoicm9naS0iLCJhIjoiY2p4a3J5M2JjMWYwZzNvcW5idGpvMDZ0ZyJ9
