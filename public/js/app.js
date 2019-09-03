@@ -1,4 +1,4 @@
-const geocode = require('../../src/utils/geocode')
+// const geocode = require('../../src/utils/geocode')
 
 const weatherForm = document.querySelector('form');
 const search = document.querySelector('input');
@@ -38,26 +38,24 @@ sendLocationButton.addEventListener('click', () => {
 
     navigator.geolocation.getCurrentPosition((position) => {
         const location = {
+            name: 'current',
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
         }
-
-        const test = geocode(location, callback);
-       console.log(test)
-        fetch('/weather?address=' + location).then((response) => {
+        console.log(location)
+        fetch('/weather?address=' + location.name).then((response) => {
             response.json().then((data) => {
                 if (data.error) {
-                    messageOne.textContent = data.error;
+                    messageOne.textContent = "data.error";
                     messageTwo.textContent = '';
                 } else {
                     messageOne.textContent = data.location;
                     messageTwo.textContent = data.forecast;
                 };
             });
-            console.log(location)
         });
-
     });
+
 });
 
 
