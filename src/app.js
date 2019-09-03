@@ -22,20 +22,20 @@ app.use(express.static(publicDirectoryPath));
 
 app.get('', (req, res) => {
     res.render('index', {
-        title: 'Weather', 
+        title: 'Weather',
         name: 'Igor S'
     });
 })
 
 app.get('/about', (req, res) => {
     res.render('about', {
-        title: 'About Me', 
+        title: 'About Me',
         name: 'Igor S'
     });
 });
 
 app.get('/help', (req, res) => {
-    res.render('help' , {
+    res.render('help', {
         title: 'Help',
         helpMsg: 'Helpful message.',
         name: 'Igor S'
@@ -43,42 +43,56 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
-    if (!req.query.address){
+    if (!req.query.address) {
         return res.send({
             error: 'you must provide an address!'
         });
     };
 
     const address = req.query.address;
-
-    geocode(address, (error, { latitude, longitude, location } = {}) => { // = {} is the empty default object 
-        if(error){ 
-            return res.send({ error });
-        };
+    const actualLocation = req.query.name
     
-        forecast( latitude, longitude, (error, forecastData) => {     // order: lat, long
-            if(error){
+    if (actualLocation) {
+        forecast(actualLocation.latitude, actualLocation.longitude, (error, forecastData) => {     // order: lat, long
+            if (error) {
                 return res.send({ error });
             };
 
             res.send({
-                location,
+                location: actualLocation,
                 forecast: forecastData,
                 address: address
             });
         });
-    });
+    } else {
+        geocode(address, (error, { latitude, longitude, location } = {}) => { // = {} is the empty default object 
+            if (error) {
+                return res.send({ error });
+            };
 
- 
+            forecast(latitude, longitude, (error, forecastData) => {     // order: lat, long
+                if (error) {
+                    return res.send({ error });
+                };
+
+                res.send({
+                    location,
+                    forecast: forecastData,
+                    address: address
+                });
+            });
+        });
+    }
+
 });
 
 app.get('/products', (req, res) => {
-    if (!req.query.search)  {
+    if (!req.query.search) {
         return res.send({
             error: 'You must provide a search term!'
         });
     };
-    
+
     console.log(req.query.search);
     res.send({
         products: []
@@ -86,7 +100,7 @@ app.get('/products', (req, res) => {
 });
 
 app.get('/help/*', (req, res) => {
-    res.render('404' ,{
+    res.render('404', {
         title: '404',
         error: 'Help article not found',
         name: 'Igor S'
