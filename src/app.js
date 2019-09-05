@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
+const reverseGeocode = require('./utils/reverseGeocode');
 const geocode = require('./utils/geocode');
 const forecast = require('./utils/forecast');
 
@@ -42,30 +43,11 @@ app.get('/help', (req, res) => {
     });
 });
 
-app.get('/weather', (req, res) => {
-    if (!req.query.address) {
-        return res.send({
-            error: 'you must provide an address!'
-        });
-    };
+app.get('/current', (req, res) => {
+    const coords = JSON.parse(req.query.coords)
 
-    const address = req.query.address;
-    const actualLocation = req.query.name
-    
-    if (actualLocation) {
-        forecast(actualLocation.latitude, actualLocation.longitude, (error, forecastData) => {     // order: lat, long
-            if (error) {
-                return res.send({ error });
-            };
-
-            res.send({
-                location: actualLocation,
-                forecast: forecastData,
-                address: address
-            });
-        });
-    } else {
-        geocode(address, (error, { latitude, longitude, location } = {}) => { // = {} is the empty default object 
+    reverseGeocode(coords.longitude, coords.latitude, (error, { city } = {}) => {
+        geocode(city, (error, { latitude, longitude } = {}) => { // = {} is the empty default object 
             if (error) {
                 return res.send({ error });
             };
@@ -76,14 +58,40 @@ app.get('/weather', (req, res) => {
                 };
 
                 res.send({
-                    location,
-                    forecast: forecastData,
-                    address: address
+                    location: city,
+                    forecast: forecastData
                 });
             });
         });
+    });
+});
+
+app.get('/weather', (req, res) => {
+    if (!req.query.address) {
+        return res.send({
+            error: 'you must provide an address!'
+        });
     }
 
+    const address = req.query.address;
+
+    geocode(address, (error, { latitude, longitude, location } = {}) => { // = {} is the empty default object 
+        if (error) {
+            return res.send({ error });
+        };
+
+        forecast(latitude, longitude, (error, forecastData) => {     // order: lat, long
+            if (error) {
+                return res.send({ error });
+            };
+
+            res.send({
+                location,
+                forecast: forecastData,
+                address: address
+            });
+        });
+    });
 });
 
 app.get('/products', (req, res) => {

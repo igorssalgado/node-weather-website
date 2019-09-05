@@ -1,7 +1,20 @@
-const geo = require('mapbox-geocoding')
+const request = require('request');
 
-    geo.reverseGeocode('mapbox.places', '-22.898786599999998', '-47.2014923', function (err, geoData) {
-        console.log(' ' + geoData);
+const reverseGeocode = (longitude, latitude, callback) => {
+
+    const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(longitude) + ',' + encodeURIComponent(latitude) + '.json?access_token=pk.eyJ1IjoiaWdvcnNzYWxnYWRvIiwiYSI6ImNrMDczeHE2MzQ3eWQzYm1qMnRzcmM3bjUifQ.-slztOca_2phP8IIVYc1wA';
+
+    request({ url, json: true }, (error, { body }) => {
+        if (error) {
+            callback('Unable to connect to Geo Code service!', undefined);
+        } else if (body.features.length === 0) {
+            callback('Please check the location. Try another search.', undefined)
+        } else {
+            callback(undefined, {
+                city: body.features[0].place_name
+            })
+        }
     });
+};
 
-// mapbox api token: pk.eyJ1Ijoicm9naS0iLCJhIjoiY2p4a3J5M2JjMWYwZzNvcW5idGpvMDZ0ZyJ9
+module.exports = reverseGeocode;
