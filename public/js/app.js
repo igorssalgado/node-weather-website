@@ -2,8 +2,8 @@ const weatherForm = document.querySelector('form');
 const search = document.querySelector('input');
 const messageOne = document.querySelector('#message-1');
 const messageTwo = document.querySelector('#message-2');
+const sendWeatherLocationButton = document.querySelector('#current-location-weather')
 
-// messageOne.textContent = 'From JavaScript'
 
 weatherForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -22,6 +22,32 @@ weatherForm.addEventListener('submit', (e) => {
                 messageOne.textContent = data.location;
                 messageTwo.textContent = data.forecast;
             };
+        });
+    });
+});
+
+sendWeatherLocationButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    messageOne.textContent = 'Loading...';
+    messageTwo.textContent = '';
+
+    if (!navigator.geolocation) {
+        return alert('Geolocation is not supported by your browser.')
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        
+        const location = {
+            longitude: position.coords.longitude,
+            latitude: position.coords.latitude            
+        }
+
+        fetch("/current?coords=" + JSON.stringify(location)).then((response) => {
+            response.json().then((data) => {
+                messageOne.textContent = data.location;
+                messageTwo.textContent = data.forecast;
+            });
         });
     });
 });
