@@ -23,20 +23,20 @@ app.use(express.static(publicDirectoryPath));
 
 app.get('', (req, res) => {
     res.render('index', {
-        title: 'Weather',
+        title: 'Weather', 
         name: 'Igor S'
     });
 })
 
 app.get('/about', (req, res) => {
     res.render('about', {
-        title: 'About Me',
+        title: 'About Me', 
         name: 'Igor S'
     });
 });
 
 app.get('/help', (req, res) => {
-    res.render('help', {
+    res.render('help' , {
         title: 'Help',
         helpMsg: 'Helpful message.',
         name: 'Igor S'
@@ -92,15 +92,16 @@ app.get('/weather', (req, res) => {
             });
         });
     });
+
 });
 
 app.get('/products', (req, res) => {
-    if (!req.query.search) {
+    if (!req.query.search)  {
         return res.send({
             error: 'You must provide a search term!'
         });
     };
-
+    
     console.log(req.query.search);
     res.send({
         products: []
@@ -108,7 +109,7 @@ app.get('/products', (req, res) => {
 });
 
 app.get('/help/*', (req, res) => {
-    res.render('404', {
+    res.render('404' ,{
         title: '404',
         error: 'Help article not found',
         name: 'Igor S'

@@ -4,12 +4,14 @@ const messageOne = document.querySelector('#message-1');
 const messageTwo = document.querySelector('#message-2');
 const sendWeatherLocationButton = document.querySelector('#current-location-weather')
 
+
 weatherForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const location = search.value;
     messageOne.textContent = 'Loading...';
     messageTwo.textContent = '';
+
 
     fetch('/weather?address=' + location).then((response) => {
         response.json().then((data) => {
