@@ -53,3 +53,7 @@ h1 {
      color: white;
      padding: 8px;
  }
+ 
+ .warning {
+    font-size: 10px; 
+ }
