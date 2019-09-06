@@ -1,1 +1,1 @@
-https://rogi-weather-application.herokuapp.com/
+https://rogi-weather-app.herokuapp.com/
