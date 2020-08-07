@@ -23,7 +23,7 @@ const forecast = (longitude, latitude, callback) => {
             + ' MIN: ' + tempLow.toFixed(1) + 'C'
             + ' MAX: ' + tempHigh.toFixed(1) + 'C'
             + ' It is currently ' + temp + ' Celsius degrees out.'  
-            + ' There is ' + chance + '% chance of rain. ');
+            + ' There is ' + chance + '% chance of rain. ' + ' >>> test');
         }
     });
 }
